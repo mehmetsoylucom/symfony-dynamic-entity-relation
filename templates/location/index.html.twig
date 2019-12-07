@@ -1,0 +1,33 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello LocationController!{% endblock %}
+
+{% block body %}
+
+    {{ form(locationForm) }}
+
+{% endblock %}
+
+{% block javascripts %}
+    <script>
+        var $country= $('#location_country');
+
+        $country.change(function() {
+            var $form = $(this).closest('form');
+            var data = {};
+            console.log($country.val());
+            data[$country.attr('name')] = $country.val();
+
+            $.ajax({
+                url : $form.attr('action'),
+                type: $form.attr('method'),
+                data : data,
+                success: function(html) {
+                    $('#location_city').replaceWith(
+                        $(html).find('#location_city')
+                    );
+                }
+            });
+        });
+    </script>
+{% endblock %}
