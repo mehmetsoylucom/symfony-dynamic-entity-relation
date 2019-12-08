@@ -6,6 +6,8 @@ use App\Entity\City;
 use App\Entity\Country;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
@@ -18,6 +20,7 @@ class LocationType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
+            ->add('name',TextType::class)
             ->add('country', EntityType::class, [
                     'class' => Country::class,
                     'choice_label' => 'name',
@@ -25,7 +28,13 @@ class LocationType extends AbstractType
                         'class' => 'input'
                     ],
                 ]
-            );
+            )->add('city', EntityType::class, [
+                'choice_label' => 'name',
+                'class' => City::class,
+                'placeholder' => false,
+                'choices' => []
+            ])
+        ->add('submit',SubmitType::class);
 
         $formModifier = function (FormInterface $form, Country $country = null) {
             $cities = [];
