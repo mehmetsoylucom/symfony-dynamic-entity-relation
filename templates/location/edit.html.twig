@@ -20,24 +20,27 @@
 
 {% block javascripts %}
     <script>
-        var $country= $('#location_country');
-
-        $country.change(function() {
-            var $form = $(this).closest('form');
+       function getData($country) {
+            var $form = $country.closest('form');
             var data = {};
-            console.log($country.val());
             data[$country.attr('name')] = $country.val();
-
             $.ajax({
-                url : '{{ url('location_new')}}',
+                url: '{{ url('location_new') }}',
                 type: $form.attr('method'),
-                data : data,
-                success: function(html) {
+                data: data,
+                success: function (html) {
                     $('#location_city').replaceWith(
                         $(html).find('#location_city')
                     );
                 }
             });
-        });
+        }
+
+        $country = $('#location_country');
+        getData($country);
+
+        $country.change(function () {
+            getData($country);
+        });            
     </script>
 {% endblock %}
